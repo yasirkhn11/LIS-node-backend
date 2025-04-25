@@ -48,6 +48,7 @@ const Patient = require('./Patient');
 const Test = require('./Test');
 const Order = require('./Order');
 const Sample = require('./Sample');
+const OrderTest = require('./OrderTest');
 
 const syncDatabase = async () => {
     try {
@@ -60,5 +61,5 @@ const syncDatabase = async () => {
 
 syncDatabase();
 
-module.exports = { User, Patient, Test, Order, Sample };
+module.exports = { User, Patient, Test, Order, Sample, OrderTest };
 

@@ -83,14 +83,24 @@ const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
 const patientRouter = require("./routes/patient.router");
 const testRouter = require("./routes/test.router");
+const orderRouter = require('./routes/order.router');
+const orderTestRouter = require('./routes/orderTest.router');
+const sampleRouter = require('./routes/sample.router');
+const roleRoutes = require('./routes/role.router');
+
+
 
 // Use Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-
-
+app.use('/api/orders', orderRouter);
 app.use('/api/patients', patientRouter);
 app.use('/api/tests', testRouter);
+app.use('/api/orderTests', orderTestRouter);
+app.use('/api/samples', sampleRouter);
+app.use('/api/orderTests', orderTestRouter);
+app.use('/api/roles', roleRoutes);
+
 
 // Print JWT Secret to confirm it's loaded (for testing)
 console.log("JWT Secret Loaded:", config.JWT_SECRET);

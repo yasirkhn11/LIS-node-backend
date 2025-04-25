@@ -1,22 +1,122 @@
+// const bcrypt = require("bcryptjs");
+// const jwt = require("jsonwebtoken");
+// //const { User } = require("../models"); // Assuming you have a Sequelize User model
+// require("dotenv").config();
+
+// const { User, Patient } = require('../models'); // Import both models
+
+// exports.register = async (req, res) => {
+//     try {
+//         const { name, email, password, role, dob, gender, phone, address } = req.body;
+
+//         // Check if the user already exists
+//         let user = await User.findOne({ where: { email } });
+//         if (user) return res.status(400).json({ message: "User already exists" });
+
+//         // Hash the password
+//         const salt = await bcrypt.genSalt(10);
+//         const hashedPassword = await bcrypt.hash(password, salt);
+
+//         // Create the user
+//         user = await User.create({
+//             name,
+//             email,
+//             password: hashedPassword,
+//             role
+//         });
+
+//         // If the role is 'patient', create a Patient record
+//         if (role === 'patient') {
+//             await Patient.create({
+//                 user_id: user.id,
+//                 dob,
+//                 gender,
+//                 phone,
+//                 address
+//             });
+//         }
+
+//         res.status(201).json({ message: "User registered successfully" });
+
+//     } catch (error) {
+//         res.status(500).json({ message: "Server error", error });
+//     }
+// };
+
+
+
+// // **User Registration**
+// // exports.register = async (req, res) => {
+// //     try {
+// //         const { name, email, password, role } = req.body;
+
+// //         // Check if the user already exists
+// //         let user = await User.findOne({ where: { email } });
+// //         if (user) return res.status(400).json({ message: "User already exists" });
+
+// //         // Hash the password
+// //         const salt = await bcrypt.genSalt(10);
+// //         const hashedPassword = await bcrypt.hash(password, salt);
+
+// //         // Create the user
+// //         user = await User.create({
+// //             name,
+// //             email,
+// //             password: hashedPassword,
+// //             role
+// //         });
+
+// //         res.status(201).json({ message: "User registered successfully" });
+
+// //     } catch (error) {
+// //         res.status(500).json({ message: "Server error", error });
+// //     }
+// // };
+
+// // // **User Login**
+// // exports.login = async (req, res) => {
+// //     try {
+// //         const { email, password } = req.body;
+
+// //         // Find user by email
+// //         const user = await User.findOne({ where: { email } });
+// //         if (!user) return res.status(400).json({ message: "Invalid credentials" });
+
+// //         // Compare passwords
+// //         const isMatch = await bcrypt.compare(password, user.password);
+// //         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+// //         // Generate JWT Token
+// //         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+
+// //         res.status(200).json({ token });
+
+// //     } catch (error) {
+// //         res.status(500).json({ message: "Server error", error });
+// //     }
+// // };
+// controllers/auth.controller.js
+
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models"); // Assuming you have a Sequelize User model
+const { User } = require("../models"); // Sequelize User model
+const Patient = require("../models/Patient"); // Sequelize Patient model
 require("dotenv").config();
 
-// **User Registration**
+// REGISTER
 exports.register = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, dob, gender, phone, address } = req.body;
 
-        // Check if the user already exists
+        // Check for existing user
         let user = await User.findOne({ where: { email } });
         if (user) return res.status(400).json({ message: "User already exists" });
 
-        // Hash the password
+        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create the user
+        // Create user
         user = await User.create({
             name,
             email,
@@ -24,32 +124,40 @@ exports.register = async (req, res) => {
             role
         });
 
+        // If role is patient, create patient record
+        if (role === 'patient') {
+            await Patient.create({
+                user_id: user.id,
+                dob,
+                gender,
+                phone,
+                address
+            });
+        }
+
         res.status(201).json({ message: "User registered successfully" });
 
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error", error: err.message });
     }
 };
 
-// **User Login**
+// LOGIN
 exports.login = async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Find user by email
         const user = await User.findOne({ where: { email } });
         if (!user) return res.status(400).json({ message: "Invalid credentials" });
 
-        // Compare passwords
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
 
-        // Generate JWT Token
         const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-
         res.status(200).json({ token });
 
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error });
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
     }
 };
+
