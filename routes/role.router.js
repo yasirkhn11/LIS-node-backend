@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
-const { verifyToken, checkRole } = require('../middleware/auth.middleware');
+const { verifyToken, checkRole } = require('../middlewares/authMiddleware');
 
 // All routes below require authentication
 router.use(verifyToken);

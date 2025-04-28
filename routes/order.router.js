@@ -11,7 +11,7 @@ const {
 } = require('../controllers/order.controller');
 
 // Routes
-router.post('/', verifyToken, checkRole(['admin', 'lab_technician']), createOrder); // Admin or lab_technician can create orders
+router.post('/', verifyToken, checkRole(['admin', 'lab_technician','patient']), createOrder); // Admin or lab_technician can create orders
 router.get('/', verifyToken, checkRole(['admin', 'lab_technician']), getAllOrders); // Admin or lab_technician can view all orders
 router.get('/:id', verifyToken, checkRole(['admin', 'lab_technician']), getOrderById); // Admin or lab_technician can view an order by ID
 router.put('/:id', verifyToken, checkRole(['admin', 'lab_technician']), updateOrder); // Admin or lab_technician can update orders
