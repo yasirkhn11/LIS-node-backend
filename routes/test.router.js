@@ -11,7 +11,7 @@ const {
 
 // Routes
 router.post('/', verifyToken, checkRole(['admin']), createTest);
-router.get('/', verifyToken, checkRole(['admin', 'lab_technician']), getAllTests);
+router.get('/', verifyToken, checkRole(['admin', 'lab_technician','patient']), getAllTests);
 router.put('/:id', verifyToken, checkRole(['admin']), updateTest);
 router.delete('/:id', verifyToken, checkRole(['admin']), deleteTest);
 
