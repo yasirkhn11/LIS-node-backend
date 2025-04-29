@@ -9,6 +9,8 @@ const {
   updateOrder,
   deleteOrder,
 } = require('../controllers/order.controller');
+router.get('/my-orders', verifyToken, checkRole(['patient']), require('../controllers/order.controller').getMyOrders);
+
 
 // Routes
 router.post('/', verifyToken, checkRole(['admin', 'lab_technician','patient']), createOrder); // Admin or lab_technician can create orders
