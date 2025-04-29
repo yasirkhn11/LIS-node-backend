@@ -37,22 +37,45 @@
 
 // module.exports = Result;
 
+// const { DataTypes } = require('sequelize');
+// const sequelize = require('../config/database');
+// const OrderTest = require('./OrderTest');
+
+// const Result = sequelize.define('Result', {
+//   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+//   ordertest_id: { type: DataTypes.INTEGER, references: { model: 'OrderTests', key: 'id' }, allowNull: false },
+//   result_value: { type: DataTypes.STRING, allowNull: false },
+//   result_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+//   result_status: { type: DataTypes.ENUM('pending', 'completed', 'rejected'), defaultValue: 'pending' },
+// }, {
+//   timestamps: true
+// });
+
+// // Associations
+// Result.belongsTo(OrderTest, { foreignKey: 'ordertest_id', onDelete: 'CASCADE' });
+
+// module.exports = Result;
+
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-const OrderTest = require('./OrderTest');
+const Sample = require('./Sample');
 
 const Result = sequelize.define('Result', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  ordertest_id: { type: DataTypes.INTEGER, references: { model: 'OrderTests', key: 'id' }, allowNull: false },
-  result_value: { type: DataTypes.STRING, allowNull: false },
-  result_date: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  result_status: { type: DataTypes.ENUM('pending', 'completed', 'rejected'), defaultValue: 'pending' },
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    sample_id: {
+        type: DataTypes.INTEGER,
+        references: { model: 'Samples', key: 'id' },
+        allowNull: false
+    },
+    result_data: { type: DataTypes.TEXT, allowNull: false },
+    uploaded_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+    uploaded_by: {
+        type: DataTypes.INTEGER,
+        references: { model: 'Users', key: 'id' },
+        allowNull: false
+    }
 }, {
-  timestamps: true
+    timestamps: true
 });
 
-// Associations
-Result.belongsTo(OrderTest, { foreignKey: 'ordertest_id', onDelete: 'CASCADE' });
-
 module.exports = Result;
-
