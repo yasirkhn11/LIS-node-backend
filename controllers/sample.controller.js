@@ -81,13 +81,89 @@
 //     res.status(500).json({ message: 'Server error', error });
 //   }
 // };
+// const Joi = require('joi');
+// const { createSample, getAllSamples, getSampleById, updateSample, deleteSample } = require('../services/sample.service');
+
+// // Joi schema for creating and updating a sample
+// const sampleSchema = Joi.object({
+//   type: Joi.string().required(),
+//   collected_by: Joi.number().required(), // Assuming 'collected_by' is a User ID
+// });
+
+// // POST: Create a new sample
+// exports.createSample = async (req, res) => {
+//   const { error } = sampleSchema.validate(req.body);
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   const { sampleType, collected_by } = req.body;
+
+//   try {
+//     const newSample = await createSample(sampleType, collected_by);
+//     res.status(201).json(newSample);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+// // GET: All samples
+// exports.getAllSamples = async (req, res) => {
+//   try {
+//     const samples = await getAllSamples();
+//     res.status(200).json(samples);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+// // GET: Single sample by ID
+// exports.getSampleById = async (req, res) => {
+//   try {
+//     const sample = await getSampleById(req.params.id);
+//     res.status(200).json(sample);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+// // PUT: Update a sample
+// exports.updateSample = async (req, res) => {
+//   const { error } = sampleSchema.validate(req.body);
+//   if (error) return res.status(400).json({ message: error.details[0].message });
+
+//   const { type, collected_by } = req.body;
+
+//   try {
+//     const updatedSample = await updateSample(req.params.id, type, collected_by);
+//     res.status(200).json({ message: 'Sample updated successfully', sample: updatedSample });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
+// // DELETE: Delete a sample
+// exports.deleteSample = async (req, res) => {
+//   try {
+//     const result = await deleteSample(req.params.id);
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// };
+
 const Joi = require('joi');
-const { createSample, getAllSamples, getSampleById, updateSample, deleteSample } = require('../services/sample.service');
+const {
+  createSample,
+  getAllSamples,
+  getSampleById,
+  updateSample,
+  deleteSample
+} = require('../services/sample.service');
 
 // Joi schema for creating and updating a sample
 const sampleSchema = Joi.object({
-  type: Joi.string().required(),
-  collected_by: Joi.number().required(), // Assuming 'collected_by' is a User ID
+  order_test_id: Joi.number().required(),
+  sample_type: Joi.string().required(),
+  collected_by: Joi.number().required()
 });
 
 // POST: Create a new sample
@@ -95,10 +171,10 @@ exports.createSample = async (req, res) => {
   const { error } = sampleSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
 
-  const { type, collected_by } = req.body;
+  const { order_test_id, sample_type, collected_by } = req.body;
 
   try {
-    const newSample = await createSample(type, collected_by);
+    const newSample = await createSample(order_test_id, sample_type, collected_by);
     res.status(201).json(newSample);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -130,10 +206,10 @@ exports.updateSample = async (req, res) => {
   const { error } = sampleSchema.validate(req.body);
   if (error) return res.status(400).json({ message: error.details[0].message });
 
-  const { type, collected_by } = req.body;
+  const { order_test_id, sample_type, collected_by } = req.body;
 
   try {
-    const updatedSample = await updateSample(req.params.id, type, collected_by);
+    const updatedSample = await updateSample(req.params.id, order_test_id, sample_type, collected_by);
     res.status(200).json({ message: 'Sample updated successfully', sample: updatedSample });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -149,4 +225,3 @@ exports.deleteSample = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
-

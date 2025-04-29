@@ -124,6 +124,7 @@ const orderRouter = require('./routes/order.router');
 const orderTestRouter = require('./routes/orderTest.router');
 const sampleRouter = require('./routes/sample.router');
 const roleRoutes = require('./routes/role.router');
+const resultRouter = require('./routes/result.router')
 
 // Use Routes
 app.use("/api/auth", authRoutes);
@@ -134,6 +135,7 @@ app.use('/api/tests', testRouter);
 app.use('/api/orderTests', orderTestRouter); // Only this one should be here
 app.use('/api/samples', sampleRouter);
 app.use('/api/roles', roleRoutes);
+app.use('/api/results',resultRouter);
 
 // Print JWT Secret to confirm it's loaded (for testing)
 if (!config.JWT_SECRET || !config.PORT) {
